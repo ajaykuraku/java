@@ -1,0 +1,39 @@
+class Solution {
+    public String removeKdigits(String num, int k) {
+          if (num.length() <= k)
+            return "0"; // Edge case - All chars will be removed with this case, so 0 is the answer.
+
+        int n = num.length();
+        Stack<Character> stk = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            while (!stk.isEmpty() && k > 0 && ((stk.peek() - '0') > (num.charAt(i) - '0'))) {
+                stk.pop(); // Pop the greater element
+                k--;
+            }
+            stk.push(num.charAt(i)); // Push the current character.
+        }
+
+        // If there are more greater elements that have not been popped
+        while (k > 0 && !stk.isEmpty()) {
+            stk.pop();
+            k--;
+        }
+
+        if (stk.isEmpty()) return "0";
+
+        StringBuilder res = new StringBuilder();
+        while (!stk.isEmpty()) {
+            res.append(stk.pop());
+        }
+
+        res.reverse(); // Reverse to get the original order
+
+        while (res.length() > 0 && res.charAt(0) == '0') {
+            // Delete leading zeroes
+            res.deleteCharAt(0);
+        }
+
+        if (res.length() == 0) return "0";
+        return res.toString();
+    }
+}
